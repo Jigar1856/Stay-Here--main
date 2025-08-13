@@ -115,6 +115,116 @@
             transform: translateY(-1px);
         }
         
+        .change-password-btn {
+            float: right;
+            color: #eaffea;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.08);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .change-password-btn:hover {
+            background: rgba(255,255,255,0.18);
+            transform: translateY(-1px);
+        }
+        
+        /* Password Modal */
+        .password-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .password-modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10% auto;
+            padding: 25px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+        }
+        
+        .password-modal h3 {
+            margin-top: 0;
+            color: #ffffff;
+            text-align: center;
+        }
+        
+        .password-modal input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.15);
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+        
+        .password-modal input:focus {
+            outline: none;
+            border-color: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+        
+        .password-modal-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .password-modal-btn {
+            padding: 8px 16px;
+            margin: 0 5px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .password-modal-btn.primary {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .password-modal-btn.secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .password-modal-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: -10px;
+        }
+        
+        .close:hover {
+            color: #fff;
+        }
+        
         .btn-animate {
             border: none;
             border-radius: 6px;
@@ -415,11 +525,57 @@
                 setTimeout(function() { row.style.opacity = 1; }, 60 + i * 60);
             });
         });
+        
+        // Password Modal Functions
+        function showPasswordModal() {
+            document.getElementById('passwordModal').style.display = 'block';
+        }
+        
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            // Clear form fields
+            document.getElementById('current_password').value = '';
+            document.getElementById('new_password').value = '';
+            document.getElementById('confirm_password').value = '';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            var modal = document.getElementById('passwordModal');
+            if (event.target == modal) {
+                closePasswordModal();
+            }
+        }
+        
+        // Password validation
+        document.getElementById('new_password').addEventListener('input', function() {
+            var newPassword = this.value;
+            var confirmPassword = document.getElementById('confirm_password').value;
+            
+            if (confirmPassword && newPassword !== confirmPassword) {
+                document.getElementById('confirm_password').style.borderColor = '#ff6b6b';
+            } else {
+                document.getElementById('confirm_password').style.borderColor = 'rgba(255,255,255,0.3)';
+            }
+        });
+        
+        document.getElementById('confirm_password').addEventListener('input', function() {
+            var newPassword = document.getElementById('new_password').value;
+            var confirmPassword = this.value;
+            
+            if (newPassword !== confirmPassword) {
+                this.style.borderColor = '#ff6b6b';
+            } else {
+                this.style.borderColor = 'rgba(255,255,255,0.3)';
+            }
+        });
     </script>
-</head>
 <body>
     <div class="dashboard animate-fade-in">
-        <h2>Registered Players <a href="{% url 'owner_logout' %}" class="logout-link">Logout</a></h2>
+        <h2>Registered Players 
+            <a href="{% url 'owner_logout' %}" class="logout-link">Logout</a>
+            <button onclick="showPasswordModal()" class="change-password-btn">Change Password</button>
+        </h2>
         <table>
             <thead>
                 <tr>
@@ -559,6 +715,30 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <!-- Password Change Modal -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-modal-content">
+            <span class="close" onclick="closePasswordModal()">&times;</span>
+            <h3>Change Password</h3>
+            <form method="post" action="{% url 'change_password' %}">
+                {% csrf_token %}
+                <label for="current_password">Current Password:</label>
+                <input type="password" id="current_password" name="current_password" required>
+                
+                <label for="new_password">New Password:</label>
+                <input type="password" id="new_password" name="new_password" required minlength="8">
+                
+                <label for="confirm_password">Confirm New Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required minlength="8">
+                
+                <div class="password-modal-buttons">
+                    <button type="button" class="password-modal-btn secondary" onclick="closePasswordModal()">Cancel</button>
+                    <button type="submit" class="password-modal-btn primary">Change Password</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <footer>

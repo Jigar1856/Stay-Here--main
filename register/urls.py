@@ -8,6 +8,7 @@ urlpatterns = [
     path('owner/login/', views.owner_login, name='owner_login'),
     path('owner/dashboard/', views.owner_dashboard, name='owner_dashboard'),
     path('logout/', views.owner_logout, name='owner_logout'),
+    path('change-password/', views.change_password, name='change_password'),
     path('player-decision/<int:player_id>/', views.player_decision, name='player_decision'),
     path('media/<path:file_path>', views.serve_media_file, name='serve_media_file'),
 ]

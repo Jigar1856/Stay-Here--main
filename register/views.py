@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Player
@@ -52,12 +53,33 @@ def owner_login(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')
 		password = request.POST.get('password')
+		
+		# Check if username and password are provided
+		if not username or not password:
+			messages.error(request, 'Please provide both username and password.')
+			return render(request, 'register/owner_login.html')
+		
+		# Authenticate user
 		user = authenticate(request, username=username, password=password)
-		if user is not None and user.is_staff:
-			login(request, user)
-			return redirect('owner_dashboard')
+		
+		if user is not None:
+			if user.is_staff:
+				login(request, user)
+				messages.success(request, f'Welcome back, {user.first_name or user.username}!')
+				return redirect('owner_dashboard')
+			else:
+				messages.error(request, 'Access denied. This account does not have owner privileges.')
 		else:
-			messages.error(request, 'Invalid credentials or not an owner.')
+			# Check if user exists but password is wrong
+			try:
+				user_exists = User.objects.filter(username=username).exists()
+				if user_exists:
+					messages.error(request, 'Incorrect password. Please try again.')
+				else:
+					messages.error(request, 'Username not found. Please check your credentials.')
+			except:
+				messages.error(request, 'Invalid credentials. Please try again.')
+		
 	return render(request, 'register/owner_login.html')
 
 
@@ -131,7 +153,40 @@ def player_decision(request, player_id):
 
 def owner_logout(request):
 	logout(request)
+	messages.success(request, 'You have been successfully logged out.')
 	return redirect('owner_login')
+
+@login_required(login_url='owner_login')
+def change_password(request):
+	if request.method == 'POST':
+		current_password = request.POST.get('current_password')
+		new_password = request.POST.get('new_password')
+		confirm_password = request.POST.get('confirm_password')
+		
+		# Validate current password
+		if not request.user.check_password(current_password):
+			messages.error(request, 'Current password is incorrect.')
+			return redirect('owner_dashboard')
+		
+		# Validate new password
+		if new_password != confirm_password:
+			messages.error(request, 'New passwords do not match.')
+			return redirect('owner_dashboard')
+		
+		if len(new_password) < 8:
+			messages.error(request, 'New password must be at least 8 characters long.')
+			return redirect('owner_dashboard')
+		
+		# Change password
+		request.user.set_password(new_password)
+		request.user.save()
+		
+		# Re-login the user
+		login(request, request.user)
+		messages.success(request, 'Password changed successfully!')
+		return redirect('owner_dashboard')
+	
+	return redirect('owner_dashboard')
 
 
 def logo_page(request):
