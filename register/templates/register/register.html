@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snooker Tournament Registration</title>
+    <link rel="stylesheet" href="{% static 'register/css/register.css' %}">
+    <script src="{% static 'register/js/register.js' %}" defer></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #000000, #1a1a1a, #000000);
+            background-size: 400% 400%;
+            animation: gradientFlow 8s ease-in-out infinite;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            animation: containerFloat 6s ease-in-out infinite;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            margin: 60px auto !important;
+            max-width: 520px !important;
+            padding: 30px 40px 20px 40px !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37) !important;
+        }
+        
+        @keyframes containerFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        h1 {
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            0% { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.3); }
+            100% { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.6); }
+        }
+        
+        label {
+            color: #ffffff;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            animation: labelSlide 0.8s ease-out;
+        }
+        
+        @keyframes labelSlide {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        input, select {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            animation: inputPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes inputPulse {
+            0%, 100% { box-shadow: 0 0 0 rgba(0, 255, 0, 0); }
+            50% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.2); }
+        }
+        
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        input:focus, select:focus {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #00ff00;
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+            transform: scale(1.02);
+        }
+        
+        button.btn-animate {
+            background: linear-gradient(45deg, #00ff00, #008000, #00ff00);
+            background-size: 200% 200%;
+            color: #000000;
+            border: none;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+            animation: buttonShine 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+        
+        @keyframes buttonShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        button.btn-animate:hover {
+            background: linear-gradient(45deg, #00cc00, #006600, #00cc00);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 0, 0.4);
+        }
+        
+        .qr-img {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            animation: qrFloat 4s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+        
+        @keyframes qrFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
+        }
+        
+        .qr-img:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3);
+        }
+        
+        .form-group {
+            animation: formGroupSlide 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        @keyframes formGroupSlide {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Stagger animation for form groups */
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <div class="container" id="main-form" style="opacity: 1 !important; pointer-events: auto !important; margin: 60px auto !important;">
+        
+        <img src="{% static 'register/img/STAY_HERE_LOGO_3_PNG[2].png' %}" id="logo-anim" alt="Stay Here Logo">
+        <h1>Snooker Tournament Registration</h1>
+        <form id="registrationForm" method="post" enctype="multipart/form-data" class="animate-slide-in" style="max-width: 340px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact: (Whatsapp)</label>
+                <input type="text" name="contact" id="contact" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" name="age" id="age" min="10" max="100" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="preferred_time">Preferred Time:</label>
+                <select name="preferred_time" id="preferred_time" required class="form-control">
+                    <option value="">Select preferred time</option>
+                    <option value="after_10_am">After 10 AM</option>
+                    <option value="after_1_pm">After 1 PM</option>
+                    <option value="after_4_pm">After 4 PM</option>
+                    <option value="after_8_pm">After 8 PM</option>
+                </select>
+            </div>
+            <div class="form-group payment-fields">
+                <label>Scan QR to Pay:</label>
+                <img src="{% static 'register/img/qr_code.jpg' %}" alt="QR Code" class="qr-img">
+                <label for="payment_screenshot">Upload Payment Screenshot:</label>
+                <input type="file" name="payment_screenshot" id="payment_screenshot" accept="image/*" required class="form-control">
+                <input type="hidden" name="amount_paid" value="600">
+            </div>
+            <button type="submit" class="btn-animate" style="margin-top: 8px;">Register</button>
+        </form>
+    </div>
+
+    <footer style="width: 100%; background: rgba(0,0,0,0.7); color: #eaffea; text-align: center; padding: 24px 0 10px 0; margin-top: 48px; font-size: 1em; position: relative; z-index: 2;">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <div style="margin-bottom: 8px;">
+                <strong>Address:</strong> Stay Here Snooker Club, Nana Mauva Main Road, Rajkot, Gujarat, India
+            </div>
+            <div style="margin-bottom: 8px;">
+                <strong>Mobile:</strong> <a href="tel:+919898213239" style="color: #00ff00; text-decoration: none;">+91 9898213239</a>
+            </div>
+        </div>
+        <div style="border-top: 1px solid rgba(255,255,255,0.12); margin: 18px auto 0 auto; max-width: 320px; padding-top: 8px; font-size: 0.98em;">
+            &copy; Copyright by Jigar Paun
+        </div>
+    </footer>
+</body>
+</html>

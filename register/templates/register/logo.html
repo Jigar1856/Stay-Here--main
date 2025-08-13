@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="{% static 'register/css/register.css' %}">
+    <style>
+        body, html { 
+            height: 100%; 
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .landing-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .bg-animated {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #000000, #1a1a1a, #000000, #0a0a0a);
+            background-size: 400% 400%;
+            animation: gradientFlow 10s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .logo-hero {
+            width: min(60vw, 280px);
+            height: auto;
+            filter: drop-shadow(0 12px 40px rgba(0,0,0,0.35));
+            opacity: 0;
+            transform: translateY(20px) scale(0.96) rotateY(0deg);
+            transition: opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1);
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { 
+                transform: translateY(0px) rotateY(0deg) scale(1); 
+                filter: drop-shadow(0 12px 40px rgba(0,0,0,0.35));
+            }
+            25% { 
+                transform: translateY(-10px) rotateY(5deg) scale(1.02); 
+                filter: drop-shadow(0 20px 50px rgba(0,255,0,0.2));
+            }
+            50% { 
+                transform: translateY(-5px) rotateY(-3deg) scale(1.01); 
+                filter: drop-shadow(0 15px 45px rgba(0,0,0,0.4));
+            }
+            75% { 
+                transform: translateY(-8px) rotateY(2deg) scale(1.015); 
+                filter: drop-shadow(0 18px 48px rgba(0,255,0,0.15));
+            }
+        }
+        
+        .logo-hero.show {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateY(0deg);
+        }
+        
+        .logo-hero:hover {
+            animation-play-state: paused;
+            transform: scale(1.1) rotateY(10deg);
+            filter: drop-shadow(0 25px 60px rgba(0,255,0,0.4));
+        }
+        
+        .cta-button {
+            margin-top: 24px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(0,255,0,0.1));
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.35);
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            animation: buttonPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes buttonPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 5px 15px rgba(0,255,0,0.2);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 8px 25px rgba(0,255,0,0.4);
+            }
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(0,255,0,0.2));
+            box-shadow: 0 15px 35px rgba(0,255,0,0.5);
+            border-color: rgba(0,255,0,0.5);
+        }
+        
+        .cta-button:active {
+            transform: translateY(-2px) scale(1.05);
+        }
+        
+        /* Particle effects */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(0, 255, 0, 0.6);
+            border-radius: 50%;
+            animation: particleFloat 8s linear infinite;
+        }
+        
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .cta-button { 
+                width: calc(100% - 48px); 
+                text-align: center; 
+                padding: 12px 20px;
+            }
+            .logo-hero {
+                width: min(70vw, 250px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="landing-wrapper">
+        <div class="bg-animated"></div>
+        <div class="particles" id="particles"></div>
+        <img src="{% static 'register/img/STAY_HERE_LOGO_3_PNG[2].png' %}" alt="Stay Here Logo" class="logo-hero" id="logoHero">
+        <a class="cta-button" href="{% url 'register' %}">Click to register</a>
+    </div>
+
+    <footer style="width: 100%; background: rgba(0,0,0,0.7); color: #eaffea; text-align: center; padding: 24px 0 10px 0; margin-top: auto; font-size: 1em; position: relative; z-index: 2;">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <div style="margin-bottom: 8px;">
+                <strong>Address:</strong> Stay Here Snooker Club, Nana Mauva Main Road, Rajkot, Gujarat, India
+            </div>
+            <div style="margin-bottom: 8px;">
+                <strong>Mobile:</strong> <a href="tel:+919898213239" style="color: #00ff00; text-decoration: none;">+91 9898213239</a>
+            </div>
+        </div>
+        <div style="border-top: 1px solid rgba(255,255,255,0.12); margin: 18px auto 0 auto; max-width: 320px; padding-top: 8px; font-size: 0.98em;">
+            &copy; Copyright by Jigss
+        </div>
+    </footer>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var logo = document.getElementById('logoHero');
+            var particlesContainer = document.getElementById('particles');
+            
+            // Create floating particles
+            function createParticles() {
+                for (let i = 0; i < 20; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 8 + 's';
+                    particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                    particlesContainer.appendChild(particle);
+                }
+            }
+            
+            // Enhanced logo animation
+            requestAnimationFrame(function(){
+                logo.classList.add('show');
+                createParticles();
+            });
+            
+            // Add 3D tilt effect on mouse move
+            document.addEventListener('mousemove', function(e) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (e.pageY - window.innerHeight / 2) / 25;
+                logo.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+            
+            // Reset transform on mouse leave
+            document.addEventListener('mouseleave', function() {
+                logo.style.transform = 'rotateY(0deg) rotateX(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>
+
