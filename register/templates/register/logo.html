@@ -23,13 +23,51 @@
             position: relative;
         }
         
+        .owner-login-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, rgba(0,255,0,0.2), rgba(0,255,0,0.1));
+            color: #ffffff;
+            border: 1px solid rgba(0,255,0,0.4);
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .owner-login-link:hover {
+            background: linear-gradient(135deg, rgba(0,255,0,0.3), rgba(0,255,0,0.2));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,255,0,0.3);
+        }
+        
         .bg-animated {
             position: absolute;
             inset: 0;
             background: linear-gradient(135deg, #000000, #1a1a1a, #000000, #0a0a0a);
             background-size: 400% 400%;
             animation: gradientFlow 10s ease-in-out infinite;
+            z-index: -2;
+        }
+        
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            background-image: url("{% static 'register/img/4.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.3;
             z-index: -1;
+            transition: opacity 0.5s ease;
+        }
+        
+        .bg-image:hover {
+            opacity: 0.4;
         }
         
         @keyframes gradientFlow {
@@ -82,9 +120,9 @@
         
         .cta-button {
             margin-top: 24px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(0,255,0,0.1));
+            background: linear-gradient(135deg, rgba(0,255,0,0.2), rgba(0,255,0,0.1));
             color: #ffffff;
-            border: 1px solid rgba(255,255,255,0.35);
+            border: 1px solid rgba(0,255,0,0.4);
             padding: 15px 25px;
             border-radius: 15px;
             text-decoration: none;
@@ -114,7 +152,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0,255,0,0.3), transparent);
             transition: left 0.5s;
         }
         
@@ -124,9 +162,9 @@
         
         .cta-button:hover {
             transform: translateY(-5px) scale(1.1);
-            background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(0,255,0,0.2));
+            background: linear-gradient(135deg, rgba(0,255,0,0.3), rgba(0,255,0,0.2));
             box-shadow: 0 15px 35px rgba(0,255,0,0.5);
-            border-color: rgba(0,255,0,0.5);
+            border-color: rgba(0,255,0,0.6);
         }
         
         .cta-button:active {
@@ -179,12 +217,35 @@
             .logo-hero {
                 width: min(70vw, 250px);
             }
+            .owner-login-link {
+                top: 15px;
+                right: 15px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+            .bg-image {
+                background-position: center center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .bg-image {
+                background-position: center center;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .bg-image {
+                background-position: center center;
+            }
         }
     </style>
 </head>
 <body>
+    <a href="{% url 'owner_login' %}" class="owner-login-link">Owner Login</a>
     <div class="landing-wrapper">
         <div class="bg-animated"></div>
+        <div class="bg-image"></div>
         <div class="particles" id="particles"></div>
         <img src="{% static 'register/img/STAY_HERE_LOGO_3_PNG[2].png' %}" alt="Stay Here Logo" class="logo-hero" id="logoHero">
         <a class="cta-button" href="{% url 'register' %}">Click to register</a>
