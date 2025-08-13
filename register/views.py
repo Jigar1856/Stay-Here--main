@@ -53,33 +53,27 @@ def owner_login(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')
 		password = request.POST.get('password')
-		
-		# Check if username and password are provided
 		if not username or not password:
 			messages.error(request, 'Please provide both username and password.')
 			return render(request, 'register/owner_login.html')
-		
-		# Authenticate user
 		user = authenticate(request, username=username, password=password)
-		
 		if user is not None:
-			if user.is_staff:
+			# Allow login if username is 'owner' or user.is_staff
+			if user.username == 'owner' or user.is_staff:
 				login(request, user)
 				messages.success(request, f'Welcome back, {user.first_name or user.username}!')
 				return redirect('owner_dashboard')
 			else:
 				messages.error(request, 'Access denied. This account does not have owner privileges.')
 		else:
-			# Check if user exists but password is wrong
 			try:
 				user_exists = User.objects.filter(username=username).exists()
 				if user_exists:
 					messages.error(request, 'Incorrect password. Please try again.')
 				else:
 					messages.error(request, 'Username not found. Please check your credentials.')
-			except:
+			except Exception:
 				messages.error(request, 'Invalid credentials. Please try again.')
-		
 	return render(request, 'register/owner_login.html')
 
 
