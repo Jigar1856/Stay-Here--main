@@ -3,22 +3,17 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
 class Command(BaseCommand):
-    help = 'Create an owner user for the Stay Here Snooker Club'
-
-    def add_arguments(self, parser):
-        parser.add_argument('--username', type=str, default='Jigar', help='Username for the owner')
-        parser.add_argument('--password', type=str, default='Iambackjigar', help='Password for the owner')
-        parser.add_argument('--email', type=str, default='jigar@stayhere.com', help='Email for the owner')
+    help = 'Setup owner user for Stay Here Snooker Club'
 
     def handle(self, *args, **options):
-        username = options['username']
-        password = options['password']
-        email = options['email']
+        username = 'Jigar'
+        password = 'Iambackjigar'
+        email = 'jigar@stayhere.com'
         
         # Check if user already exists
         if User.objects.filter(username=username).exists():
             self.stdout.write(
-                self.style.WARNING(f'User "{username}" already exists. Use different credentials or update existing user.')
+                self.style.WARNING(f'User "{username}" already exists.')
             )
             return
         
@@ -29,13 +24,13 @@ class Command(BaseCommand):
             password=make_password(password),
             is_staff=True,
             is_superuser=False,
-            first_name='Stay Here',
-            last_name='Owner'
+            first_name='Jigar',
+            last_name='Paun'
         )
         
         self.stdout.write(
             self.style.SUCCESS(
-                f'Successfully created owner user:\n'
+                f'✅ Successfully created owner user:\n'
                 f'Username: {username}\n'
                 f'Password: {password}\n'
                 f'Email: {email}\n'
@@ -45,7 +40,7 @@ class Command(BaseCommand):
         )
         
         self.stdout.write(
-            self.style.WARNING(
-                '\n⚠️  IMPORTANT: Please change the default password after first login for security!'
+            self.style.SUCCESS(
+                '\n🎉 You can now login at: https://stay-here-ly6z.onrender.com/owner/login/'
             )
         )

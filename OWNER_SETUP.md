@@ -14,9 +14,9 @@ python manage.py create_owner --username owner --password your_secure_password -
 ```
 
 **Default credentials (if no arguments provided):**
-- Username: `owner`
-- Password: `owner123`
-- Email: `owner@stayhere.com`
+- Username: `Jigar`
+- Password: `Iambackjigar`
+- Email: `jigar@stayhere.com`
 
 ### Option 2: Using Django Admin
 
@@ -31,9 +31,9 @@ python manage.py createsuperuser
    - Go to "Users" section
    - Click "Add User"
    - Fill in the details:
-     - Username: `owner` (or your preferred username)
-     - Password: `your_secure_password`
-     - Email: `owner@stayhere.com`
+           - Username: `Jigar` (or your preferred username)
+      - Password: `Iambackjigar`
+      - Email: `jigar@stayhere.com`
    - **IMPORTANT:** Check the "Staff status" checkbox
    - Save the user
 
@@ -51,13 +51,13 @@ from django.contrib.auth.hashers import make_password
 
 # Create owner user
 user = User.objects.create(
-    username='owner',
-    email='owner@stayhere.com',
-    password=make_password('your_secure_password'),
+    username='Jigar',
+    email='jigar@stayhere.com',
+    password=make_password('Iambackjigar'),
     is_staff=True,
     is_superuser=False,
-    first_name='Stay Here',
-    last_name='Owner'
+    first_name='Jigar',
+    last_name='Paun'
 )
 print(f"Owner user created: {user.username}")
 ```
