@@ -105,8 +105,13 @@ if os.getenv('DATABASE_URL') and dj_database_url is not None:
 # In production, require DATABASE_URL to avoid using ephemeral SQLite.
 # Allow collectstatic during build to run without a database connection.
 if not DEBUG:
-    running_collectstatic = len(sys.argv) > 1 and sys.argv[1] == 'collectstatic'
-    if not running_collectstatic and not os.getenv('DATABASE_URL'):
+    running_manage_command = len(sys.argv) > 1 and sys.argv[1] in (
+        'collectstatic',
+        'migrate',
+        'makemigrations',
+        'check',
+    )
+    if not running_manage_command and not os.getenv('DATABASE_URL'):
         raise RuntimeError('DATABASE_URL is required in production')
 
 
