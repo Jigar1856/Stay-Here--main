@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 
 # Optional production helpers; safe to run locally without these installed
 try:  # dj_database_url is used only when DATABASE_URL is present
@@ -101,9 +102,12 @@ DATABASES = {
 if os.getenv('DATABASE_URL') and dj_database_url is not None:
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-# In production, require DATABASE_URL to avoid using ephemeral SQLite
-if not DEBUG and not os.getenv('DATABASE_URL'):
-    raise RuntimeError('DATABASE_URL is required in production')
+# In production, require DATABASE_URL to avoid using ephemeral SQLite.
+# Allow collectstatic during build to run without a database connection.
+if not DEBUG:
+    running_collectstatic = len(sys.argv) > 1 and sys.argv[1] == 'collectstatic'
+    if not running_collectstatic and not os.getenv('DATABASE_URL'):
+        raise RuntimeError('DATABASE_URL is required in production')
 
 
 # Password validation
