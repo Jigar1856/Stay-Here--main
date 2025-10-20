@@ -3,8 +3,8 @@ services:
     name: django-reg
     env: python
     rootDir: .
-    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: python manage.py migrate && gunicorn reg.wsgi:application
+    buildCommand: pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
+    startCommand: gunicorn reg.wsgi:application
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -12,17 +12,6 @@ services:
         value: "False"
       - key: ALLOWED_HOSTS
         value: .onrender.com,localhost,127.0.0.1
-      - key: DATABASE_URL
-        fromDatabase:
-          name: reg-postgres
-          property: connectionString
     autoDeploy: true
-    disk:
-      name: media
-      mountPath: /opt/render/project/src/media
-
-databases:
-  - name: reg-postgres
-    databaseName: reg
-    user: reg
+    
 

@@ -102,17 +102,7 @@ DATABASES = {
 if os.getenv('DATABASE_URL') and dj_database_url is not None:
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-# In production, require DATABASE_URL to avoid using ephemeral SQLite.
-# Allow collectstatic during build to run without a database connection.
-if not DEBUG:
-    running_manage_command = len(sys.argv) > 1 and sys.argv[1] in (
-        'collectstatic',
-        'migrate',
-        'makemigrations',
-        'check',
-    )
-    if not running_manage_command and not os.getenv('DATABASE_URL'):
-        raise RuntimeError('DATABASE_URL is required in production')
+# No hard requirement on DATABASE_URL; defaults to SQLite if not present
 
 
 # Password validation
